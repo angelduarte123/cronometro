@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronometro</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <scrpit src="script.js" type="text/javascript" defer></scrpit>
+</head>
+<body>
+
+    <style>
+        *{
+            transition: all 0.3s;
+        }
+        body{
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 300%;
+            color: white;
+            background: linear-gradient(white, rgb(96, 196, 235));
+        }
+
+        .marco{
+            border-radius: 30px;
+            background: #151515;
+            padding: 15px;
+        }
+
+        .botones{
+            display: flex;
+            justify-content: space-around;
+        }
+        .btn{
+            display: inline-block;
+        }
+
+    </style>
+    
+    <div class="marco">
+        <div clss="tiempo" id="tiempo">
+            00:00:00.000
+        </div>
+        
+        <div class="botones">
+            <div class="btn" onclick="iniciar()">
+                <i class="fa-solid fa-play"></i>
+            </div>
+            <div class="btn">
+                <i class="fa-solid fa-pause" onclick="pausar()"></i>
+            </div>
+            <div class="btn">
+                <i class="fas fa-redo" onclick="reiniciar()"></i>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        let tiempoRef = Date.now()
+        let cronometrar = true
+        let acumulado = 0
+
+        function iniciar(){
+            cronometrar = true
+        }
+
+        function pausar(){
+            cronometrar = false
+        }
+
+        function reiniciar(){
+            acumulado = 0
+        }
+
+        setInterval(() => {
+            let tiempo = document.getElementById("tiempo")
+            if(cronometrar){
+                acumulado += Date.now() -tiempoRef
+
+            }
+            tiempoRef = Date.now()
+            tiempo.innerHTML = formatearMS(acumulado)
+        }, 1000/60);
+
+        function formatearMS(ms){
+            let MS = ms%1000
+            let S = Math.floor(((ms-MS)/1000) % 60)
+            let M = Math.floor((S / 60) % 60)
+            let H = Math.floor((M / 60))
+            Number.prototype.ceros = function (n) {
+                return (this + "").padStart(n, 0)
+            }
+            return H.ceros(2) + ":" + M.ceros(2) + ":" + S.ceros(2) + ":" + MS.ceros(3)
+        }
+
+    </script>
+
+    <br>
+    
+
+</body>
+</html>
